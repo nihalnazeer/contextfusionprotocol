@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "pipeline_id": "run_001",
+  "description": "Basic customer segmentation",
+  "missing_value_check": true,
+  "default_fill_value": null,
+
+  "files": [
+    {
+      "file_id": "customer_csv",
+      "file_type": "csv",
+      "file_path": "./data/customers.csv",
+      "features": [
+        {
+          "name": "customer_id",
+          "type": "categorical",
+          "alias": "cust_id",
+          "prompt": "Unique identifier for customer"
+        },
+        {
+          "name": "joined_date",
+          "type": "datetime",
+          "alias": "join_time",
+          "prompt": "When the customer registered"
+        },
+        {
+          "name": "amount_spent",
+          "type": "numerical",
+          "alias": "spent",
+          "prompt": "Total amount customer has spent",
+          "nullable": true,
+          "default": 0
+        }
+      ],
+      "file_query": "Analyze customer spending patterns over time"
+    }
+  ],
+
+  "final_query": "Generate profiles of customers likely to churn."
+}

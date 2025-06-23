@@ -1,0 +1,74 @@
+{
+  "schema_version": "2.0.0",
+  "pipeline_id": "run_002",
+  "description": "Transaction and sentiment analysis for customer profiling",
+  "created_by": "analyst_01",
+  "created_at": "2025-06-19T11:00:00Z",
+  "missing_value_check": true,
+  "default_fill_value": 0,
+
+  "global_settings": {
+    "fusion_method": "attention",
+    "output_vector_dimension": 512,
+    "logging_level": "INFO",
+    "error_handling": "strict"
+  },
+
+  "context_settings": {
+    "override_fusion_method": "weighted_average",
+    "batch_mode": true
+  },
+
+  "files": [
+    {
+      "file_id": "transaction_csv",
+      "file_type": "csv",
+      "file_path": "./data/transactions.csv",
+      "features": [
+        {
+          "name": "customer_id",
+          "type": "categorical",
+          "alias": "cust_id",
+          "prompt": "Customer identifier"
+        },
+        {
+          "name": "transaction_date",
+          "type": "datetime",
+          "alias": "txn_time",
+          "prompt": "Date of transaction"
+        },
+        {
+          "name": "amount",
+          "type": "numerical",
+          "alias": "txn_amt",
+          "prompt": "Transaction value",
+          "nullable": true,
+          "default": 0
+        }
+      ],
+      "file_query": "Summarize customer transaction patterns",
+      "preprocessing_hooks": ["remove_duplicates"],
+      "postprocessing_hooks": ["aggregate_monthly"]
+    },
+
+    {
+      "file_id": "feedback_notes",
+      "file_type": "text",
+      "file_path": "./data/feedback.txt",
+      "features": [
+        {
+          "name": "note_text",
+          "type": "text",
+          "alias": "customer_feedback",
+          "prompt": "Customer opinion notes",
+          "nullable": false
+        }
+      ],
+      "file_query": "Extract sentiment from customer notes",
+      "preprocessing_hooks": ["clean_text"],
+      "postprocessing_hooks": ["sentiment_analysis"]
+    }
+  ],
+
+  "final_query": "Combine sentiment and transactions to predict top 20% of customers."
+}
